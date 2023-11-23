@@ -8,94 +8,86 @@ using Unity.VisualScripting;
 public class BarkAndAttackScript : MonoBehaviour
 {
     private AudioSource audioSource;
-    private Animator animator;
     private NavMeshAgent navMeshAgent;
+    private GameObject player;
+    private Animator animator;
 
-    public AudioClip[] barkClips;
     public AudioClip[] howlClips;
     public AudioClip[] attackClips;
+    public AudioClip[] barkClips;
 
-    private int barkClipIndex;
-    private int howlClipIndex;
-    private int attackClipIndex;
-    private int repeatIndex;
+    public int attackIndex;
 
-    public float followDelayTime;
+    public bool howlStarted;
+    public bool startPursuit = false;
+    public bool howlFinnished;
+    public bool followPlayer;
+    public bool isAttacking;
+
+    public float chaseRange;
+    public float attackRange;
+    public float chaseSpeed;
     public float stopFollowDelayTime;
-    public float barkDelay;
-
-    public bool followPlayer = false;
-    public bool startDelayStopFollow = false;
-    public bool attackPlayer =false;
-    public bool isAttacking = false;
+    public float howlFinnishedDelayTime;
+    public float timeBetweenAttacks;
 
     private void Start()
     {
-        followPlayer = false;
-        audioSource = GetComponent<AudioSource>();
-        animator= GetComponent<Animator>();
-        navMeshAgent= GetComponent<NavMeshAgent>();
-
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        audioSource= GetComponent<AudioSource>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        navMeshAgent.speed = chaseSpeed;
+    
     }
 
-    void Update()
+    private void Update()
     {
-        if (followPlayer == true)
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (!startPursuit)
         {
-            FollowPlayer();
+            Idle();
+            return;
         }
-    }
 
-    //El jugador entra en el collider de detección
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        if(startPursuit && !howlStarted)
         {
             Howl();
-            StartCoroutine(FollowDelay(followDelayTime));
         }
-    }
-
-    //El jugador sale del collider de detección
-    private void OnTriggerExit(Collider other)
-    {
-        startDelayStopFollow = true;
-        StartCoroutine(DelayOnTriggerExit(stopFollowDelayTime));
-    }
-
-    //El perro ladra
-    private void Bark()
-    {
-        repeatIndex = Random.Range(1, 3);
-
-        //El perro ladra aleatoriamente de 1 a 4 veces
-        for (int i = 0; i <= repeatIndex; i++)
+        if (startPursuit && howlFinnished)
         {
-            barkClipIndex = Random.Range(0, 4);
-            audioSource.PlayOneShot(barkClips[barkClipIndex]);
+            FollowPlayer();
+
+            if (distanceToPlayer < attackRange && !isAttacking)
+            {
+                Attack();
+                StartCoroutine(DelayBetweenAttack());
+            }
+            else
+            {
+                return;
+            }
         }
+
     }
 
-    //El perro aulla
-    private void Howl()
+    private void Idle()
     {
-        animator.SetBool("Idle", false);
+        animator.SetBool("Idle", true);
         animator.SetBool("Run", false);
-        animator.SetBool("Howl", true);
+        animator.SetBool("Howl", false);
         animator.SetBool("Attack1", false);
         animator.SetBool("Attack2", false);
         animator.SetBool("Damage", false);
         animator.SetBool("Eat", false);
-
-        howlClipIndex = Random.Range(0, 1);
-        audioSource.PlayOneShot(howlClips[howlClipIndex]);
+        navMeshAgent.isStopped = true;
     }
 
-    //El perro persigue al jugador
     private void FollowPlayer()
     {
         animator.SetBool("Idle", false);
-        animator.SetBool("Run", true);
+        animator.SetBool("Run",true);
         animator.SetBool("Howl", false);
         animator.SetBool("Attack1", false);
         animator.SetBool("Attack2", false);
@@ -104,83 +96,111 @@ public class BarkAndAttackScript : MonoBehaviour
 
         followPlayer = true;
         navMeshAgent.isStopped = false;
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        navMeshAgent.SetDestination(playerObject.transform.position);
+        navMeshAgent.SetDestination(player.transform.position);
     }
 
-    //El perro ataca al jugador y le resta un corazón (o le baja vida)
-    private void Attack()
+    private void Howl()
     {
-        attackPlayer = true;
-
-        animator.SetBool("Howl", false);
+        howlStarted=true;
         animator.SetBool("Idle", false);
-        animator.SetBool("Damage", false);
         animator.SetBool("Run", false);
+        animator.SetBool("Howl", true);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
         animator.SetBool("Eat", false);
 
-        int attackIndex = Random.Range(0, 1);
-        switch(attackIndex)
-        {
-            case 0: animator.SetBool("Attack1", true);
-                    animator.SetBool("Attack2", false);
-                break;
-
-            case 1: animator.SetBool("Attack1", false);
-                    animator.SetBool("Attack2", true);
-                break;
-        }
-
-        if (attackPlayer == true)
-        {
-            attackClipIndex = Random.Range(0, 1);
-            audioSource.PlayOneShot(attackClips[attackClipIndex]);
-        }
+        int howlIndex = Random.Range(0, 2);
+        audioSource.PlayOneShot(howlClips[howlIndex]);
+        StartCoroutine(HowlFinnishedDelay());
     }
 
-    private void StopFollowPlayer()
+    private void HowlFinnished()
     {
-        attackPlayer = false;
-        followPlayer = false;
-        navMeshAgent.isStopped = true;
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", true);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", false);
+        howlFinnished=true;
     }
 
-    private void DamagePlayer(int DamageAmount)
+    private void Attack()
     {
-        //PlayerHealthScript.playerHealth -= AmountDamage;
+        isAttacking = true;
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", false);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", false);
 
-    }
+        attackIndex = Random.Range(1, 10);
 
-    private IEnumerator DelayOnTriggerExit(float time)
-    {
-        yield return new WaitForSeconds(time);
-
-        if (followPlayer == true)
+        if (attackIndex <= 5)
         {
-
-            StopFollowPlayer();
-            animator.SetBool("Howl", false);
-            animator.SetBool("Idle", true);
-            animator.SetBool("Damage", false);
-            animator.SetBool("Run", false);
-            animator.SetBool("Eat", false);
-            animator.SetBool("Attack1", false);
+            animator.SetBool("Attack1", true);
             animator.SetBool("Attack2", false);
         }
+        else if (attackIndex <= 10)
+        {
+            animator.SetBool("Attack1", false);
+            animator.SetBool("Attack2", true);
+        }
+
+        navMeshAgent.isStopped = true;
+
+        int attackSoundIndex = Random.Range(0, 2);
+        audioSource.PlayOneShot(attackClips[attackSoundIndex]);
+
+        StartCoroutine(DelayBetweenAttack());
 
     }
 
-    private IEnumerator FollowDelay(float time)
+    private void OnTriggerEnter(Collider other)
     {
-        yield return new WaitForSeconds(time);
-        followPlayer = true;
+        if (other.CompareTag("Player"))
+        {
+            startPursuit = true;
+        }
     }
 
-    /*private IEnumerator BarkDelay(float time)
+    private void OnTriggerExit(Collider other)
     {
-        yield return new WaitForSeconds(time);
-        Bark();
-    }*/
+        if(other.CompareTag("Player"))
+        {
+            StartCoroutine(StopFollowDelay());
+        }
+    }
 
+    IEnumerator HowlFinnishedDelay()
+    {
+        yield return new WaitForSeconds(howlFinnishedDelayTime);
+        HowlFinnished();
+    }
 
+    IEnumerator StopFollowDelay()
+    {
+        yield return new WaitForSeconds(stopFollowDelayTime);
+        followPlayer = false;
+        startPursuit = false;
+
+        int howlState = Random.Range(0, 1);
+        bool howlStateBool = false;
+        if (howlState !=0)
+        {
+            howlStateBool = true;
+        }
+        howlStarted = howlStateBool;
+
+        howlFinnished = false;
+    }
+
+    IEnumerator DelayBetweenAttack()
+    {
+        yield return new WaitForSeconds(timeBetweenAttacks);
+        isAttacking = false;
+
+    }
 }
