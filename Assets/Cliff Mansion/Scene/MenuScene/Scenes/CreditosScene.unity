@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -242,6 +242,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95da5346c9bd3b74e8250eb59f48f892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressedClip: {fileID: 8300000, guid: 531b2005c84e3bf4dbedbf158aadcef8, type: 3}
+  highlightedClip: {fileID: 8300000, guid: 531b2005c84e3bf4dbedbf158aadcef8, type: 3}
+  loadingImage: {fileID: 366879669}
 --- !u!82 &33679467
 AudioSource:
   m_ObjectHideFlags: 0
@@ -376,7 +379,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 313, y: -202}
+  m_AnchoredPosition: {x: 342, y: -176}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &138911879
@@ -445,7 +448,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 33679466}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: EmpezarNivel
+        m_MethodName: OnPressedButton
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -808,7 +811,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 275.4, y: 168}
+  m_AnchoredPosition: {x: 246, y: 149}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571263127
@@ -1142,7 +1145,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 307, y: 115}
+  m_AnchoredPosition: {x: 316, y: 91}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &790863134

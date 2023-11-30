@@ -1,19 +1,54 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
-    public void EmpezarNivel(string NombreEscena)
+    public AudioClip pressedClip;
+    public AudioClip highlightedClip;
+    public GameObject loadingImage;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        SceneManager.LoadScene(NombreEscena);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+    }
+    public void OnHighlighted()
+    {
+        GetComponent<AudioSource>().PlayOneShot(highlightedClip);
+    }
+    public void OnPressedButton(string sceneName)
+    {
+        loadingImage.SetActive(true);
+        GetComponent<AudioSource>().PlayOneShot(pressedClip);
+        StartCoroutine(DelaySceneChange(sceneName));
+    }
+    public void OnPressedQuit()
+    {
+        GetComponent<AudioSource>().PlayOneShot(pressedClip);
+        StartCoroutine(DelayQuit());
     }
 
-    public void Salir()
+    private IEnumerator DelaySceneChange(string sceneName)
     {
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    }
+
+    private IEnumerator DelayQuit()
+    {
+        yield return new WaitForSeconds(1.5f);
         Application.Quit();
-        Debug.Log("Aqui se cierra el juego");
+
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 }
 
