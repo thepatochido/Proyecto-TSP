@@ -13,12 +13,14 @@ public class HowlAndAttackScript : MonoBehaviour
     public AudioClip[] howlClips;
     public AudioClip[] attackClips;
     public AudioClip[] barkClips;
+    public GameObject boneItem;
 
     public bool startPursuit;
     public bool howlStarted;
     public bool howlFinnished;
     public bool followPlayer;
     public bool isAttacking;
+    public bool boneAviable;
 
     public float chaseRange;
     public float attackRange;
@@ -40,18 +42,21 @@ public class HowlAndAttackScript : MonoBehaviour
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
         
-        if (distanceToPlayer <= chaseRange)
+        if (distanceToPlayer <= chaseRange && boneAviable==false)
         {
             startPursuit = true;
         }
 
-        if (!startPursuit)
+        if (boneAviable==true)
+        {
+            FollowBone();
+        }
+
+        if (!startPursuit && boneAviable==false)
         {
             Idle();
             return;
         }
-
-        
 
         if (startPursuit && !howlStarted)
         {
@@ -152,11 +157,31 @@ public class HowlAndAttackScript : MonoBehaviour
         howlFinnished= true;
     }
 
+    private void FollowBone()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", true);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", false);
+
+        navMeshAgent.isStopped = false;
+        navMeshAgent.SetDestination(boneItem.transform.position);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bone"))
+        if (other.CompareTag("BoneForEat"))
         {
-
+            boneItem = GameObject.FindGameObjectWithTag("BoneForEat");
+            startPursuit = false;
+            howlStarted= false;
+            howlFinnished= false;
+            followPlayer = false;
+            isAttacking=false;
+            boneAviable = true;
         }
     }
 
