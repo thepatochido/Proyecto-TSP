@@ -201,6 +201,5 @@ public class BarkAndAttackScript : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenAttacks);
         isAttacking = false;
-
     }
 }
