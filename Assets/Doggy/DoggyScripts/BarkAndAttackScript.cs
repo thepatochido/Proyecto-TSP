@@ -30,6 +30,7 @@ public class BarkAndAttackScript : MonoBehaviour
     public float stopFollowDelayTime;
     public float howlFinnishedDelayTime;
     public float timeBetweenAttacks;
+    public float chaseRangeAmount;
 
     private void Start()
     {

@@ -23,8 +23,10 @@ public class HowlAndAttackScript : MonoBehaviour
     public bool boneAviable;
 
     public float chaseRange;
+    public float chaseRangeAmount;
     public float attackRange;
     public float eatRange;
+    public float eatingTime;
     public float chaseSpeed;
     public float timeBetweenAttacks;
 

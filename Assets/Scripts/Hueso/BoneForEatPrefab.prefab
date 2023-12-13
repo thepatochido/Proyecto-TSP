@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3941595724867934893}
   - component: {fileID: 3955938234940085354}
   - component: {fileID: 3955938234940085357}
-  - component: {fileID: 4598629595368713820}
+  - component: {fileID: 5974786900171443060}
   m_Layer: 0
   m_Name: BoneForEatPrefab
   m_TagString: BoneForEat
@@ -116,7 +116,7 @@ CapsuleCollider:
   m_Height: 1.4
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: -0.000000044703484}
---- !u!114 &4598629595368713820
+--- !u!114 &5974786900171443060
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,3 +128,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4246afd00d085334ab56b3578de8e3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eated: 0
