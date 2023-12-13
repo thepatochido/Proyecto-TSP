@@ -24,6 +24,7 @@ public class HowlAndAttackScript : MonoBehaviour
 
     public float chaseRange;
     public float attackRange;
+    public float eatRange;
     public float chaseSpeed;
     public float timeBetweenAttacks;
 
@@ -41,7 +42,6 @@ public class HowlAndAttackScript : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-        
         if (distanceToPlayer <= chaseRange && boneAviable==false)
         {
             startPursuit = true;
@@ -49,7 +49,18 @@ public class HowlAndAttackScript : MonoBehaviour
 
         if (boneAviable==true)
         {
+            float distanceToBone = Vector3.Distance(transform.position, boneItem.transform.position);
+
             FollowBone();
+
+            if (distanceToBone <= eatRange)
+            {
+                EatBone();
+            }
+            else
+            {
+                return;
+            }
         }
 
         if (!startPursuit && boneAviable==false)
@@ -169,6 +180,19 @@ public class HowlAndAttackScript : MonoBehaviour
 
         navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(boneItem.transform.position);
+    }
+
+    private void EatBone()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", false);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", true);
+
+        navMeshAgent.isStopped = true;
     }
 
     private void OnTriggerEnter(Collider other)
