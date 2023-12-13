@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Cliff Mansion/Scene/MenuScene/Scenes/MenuPrincipal.unity
     guid: 912090c68fabea44ca6f806d1d57dd3d
+  - enabled: 1
+    path: Assets/Cliff Mansion/Scene/MenuScene/Scenes/MenuPausa.unity
+    guid: f0ae670770f54ff4aaae7e91f5314313
   m_configObjects: {}

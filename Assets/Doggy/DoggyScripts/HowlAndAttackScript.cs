@@ -13,15 +13,20 @@ public class HowlAndAttackScript : MonoBehaviour
     public AudioClip[] howlClips;
     public AudioClip[] attackClips;
     public AudioClip[] barkClips;
+    public GameObject boneItem;
 
     public bool startPursuit;
     public bool howlStarted;
     public bool howlFinnished;
     public bool followPlayer;
     public bool isAttacking;
+    public bool boneAviable;
 
     public float chaseRange;
+    public float chaseRangeAmount;
     public float attackRange;
+    public float eatRange;
+    public float eatingTime;
     public float chaseSpeed;
     public float timeBetweenAttacks;
 
@@ -39,19 +44,32 @@ public class HowlAndAttackScript : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-        
-        if (distanceToPlayer <= chaseRange)
+        if (distanceToPlayer <= chaseRange && boneAviable==false)
         {
             startPursuit = true;
         }
 
-        if (!startPursuit)
+        if (boneAviable==true)
+        {
+            float distanceToBone = Vector3.Distance(transform.position, boneItem.transform.position);
+
+            FollowBone();
+
+            if (distanceToBone <= eatRange)
+            {
+                EatBone();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        if (!startPursuit && boneAviable==false)
         {
             Idle();
             return;
         }
-
-        
 
         if (startPursuit && !howlStarted)
         {
@@ -152,11 +170,44 @@ public class HowlAndAttackScript : MonoBehaviour
         howlFinnished= true;
     }
 
+    private void FollowBone()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", true);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", false);
+
+        navMeshAgent.isStopped = false;
+        navMeshAgent.SetDestination(boneItem.transform.position);
+    }
+
+    private void EatBone()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Run", false);
+        animator.SetBool("Howl", false);
+        animator.SetBool("Attack1", false);
+        animator.SetBool("Attack2", false);
+        animator.SetBool("Damage", false);
+        animator.SetBool("Eat", true);
+
+        navMeshAgent.isStopped = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Bone"))
+        if (other.CompareTag("BoneForEat"))
         {
-
+            boneItem = GameObject.FindGameObjectWithTag("BoneForEat");
+            startPursuit = false;
+            howlStarted= false;
+            howlFinnished= false;
+            followPlayer = false;
+            isAttacking=false;
+            boneAviable = true;
         }
     }
 
