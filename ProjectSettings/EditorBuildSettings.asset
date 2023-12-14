@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Cliff Mansion/Scene/MenuScene/Scenes/OpcionesScene.unity
     guid: 7508015f604cc6b4881f11e387fa6fb1
   - enabled: 1
+    path: Assets/Cliff Mansion/Scene/MenuScene/Scenes/EndScene.unity
+    guid: 952c3c27aa9192243894b72b0fe5b862
+  - enabled: 1
     path: Assets/Cliff Mansion/Scene/PlayScene.unity
     guid: 291c1f116413b5e49b525eb08670031c
   m_configObjects: {}

@@ -11,7 +11,7 @@ public class TimerCountdownScript : MonoBehaviour
     private float remainingTime;
     private bool timerStarted = false;
     private BarreraInvisibleEntradaScript barreraScript;
-    public GameObject blackImage;
+    //public GameObject blackImage;
 
     void Start()
     {
@@ -28,7 +28,8 @@ public class TimerCountdownScript : MonoBehaviour
         else if (barreraScript.tiempoRestante <= 0)
         {
             timerText.color = Color.red;
-            UpdateTimerUI(0);   
+            UpdateTimerUI(0);
+            StartCoroutine("DelaySceneChange");
         }
     }
 
