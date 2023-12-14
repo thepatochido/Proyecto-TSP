@@ -31,6 +31,7 @@ public class HowlAndAttackScript : MonoBehaviour
     public float timeBetweenAttacks;
 
     public int attackAnimationIndex;
+    public int damageToPlayer;
 
     void Start()
     {
@@ -161,7 +162,7 @@ public class HowlAndAttackScript : MonoBehaviour
         int attackSoundIndex = Random.Range(0, attackClips.Length);
         audioSource.PlayOneShot(attackClips[attackSoundIndex]);
 
-        //player.GetComponent<PlayerHealthScript>().DamagePlayer(damageToPlayer);
+        player.GetComponent<CorazonesScript>().DamagePlayer(damageToPlayer);
 
     }
 

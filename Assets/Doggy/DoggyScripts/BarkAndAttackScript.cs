@@ -17,6 +17,7 @@ public class BarkAndAttackScript : MonoBehaviour
     public AudioClip[] barkClips;
 
     public int attackIndex;
+    public int damageToPlayer;
 
     public bool howlStarted;
     public bool startPursuit = false;
@@ -150,6 +151,8 @@ public class BarkAndAttackScript : MonoBehaviour
             animator.SetBool("Attack2", true);
         }
 
+        player.GetComponent<PlayerHealthScript>().DamagePlayer(damageToPlayer);
+
         navMeshAgent.isStopped = true;
 
         int attackSoundIndex = Random.Range(0, 2);
@@ -161,7 +164,7 @@ public class BarkAndAttackScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             startPursuit = true;
         }
@@ -203,4 +206,6 @@ public class BarkAndAttackScript : MonoBehaviour
         yield return new WaitForSeconds(timeBetweenAttacks);
         isAttacking = false;
     }
+
+        
 }
