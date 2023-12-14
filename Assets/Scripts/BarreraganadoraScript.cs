@@ -11,6 +11,14 @@ public class BarreraganadoraScript : MonoBehaviour
         if (other.CompareTag("Player") && controladorColeccionables.collectedCount == controladorColeccionables.totalCollectibles)
         {
             Debug.Log("¡Ganaste!");
+          
         }
     }
+
+    /*private IEnumerator DelaySceneChange()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("WinScene", LoadSceneMode.single);
+
+    }*/
 }
