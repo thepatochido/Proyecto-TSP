@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BarreraInvisibleEntradaScript : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI timerText;
+
     public AudioSource alarmaAudioSource;
     public AudioClip sonidoAlTocar;
     public float tiempoDeAlarma = 90f;
-    private float tiempoRestante;
+    public float tiempoRestante;
     public float rangoDeApagado = 5f; // Nuevo rango para apagar la alarma
     private bool hasItTurnedOn = false; //Es para evitar multiples iteraciones
 
