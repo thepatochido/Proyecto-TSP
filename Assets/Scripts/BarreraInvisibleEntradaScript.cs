@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class BarreraInvisibleEntradaScript : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class BarreraInvisibleEntradaScript : MonoBehaviour
     private bool hasItTurnedOn = false; //Es para evitar multiples iteraciones
 
     private bool alarmaActivada = false;
+
+    public GameObject blackImage;
 
     void Start()
     {
@@ -41,6 +45,17 @@ public class BarreraInvisibleEntradaScript : MonoBehaviour
         }
 
         Debug.Log("Tiempo restante: " + tiempoRestante);
+        if (tiempoRestante <= 1)
+        {
+            blackImage.SetActive(true);
+            StartCoroutine(DelaySceneChange());
+        }
+    }
+
+    private IEnumerator DelaySceneChange()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
     }
 
     void Update()

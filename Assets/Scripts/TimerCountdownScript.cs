@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,16 +29,25 @@ public class TimerCountdownScript : MonoBehaviour
 
 using System.Collections;
 using System.Collections.Generic;
+=======
+>>>>>>> Stashed changes
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TimerCountdownScript : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] float initialTime;
     private float remainingTime;
+<<<<<<< Updated upstream
     private bool timerStarted = false;
+=======
+    private BarreraInvisibleEntradaScript barreraScript;
+    public GameObject blackImage;
+>>>>>>> Stashed changes
 
     void Start()
     {
@@ -51,10 +61,11 @@ public class TimerCountdownScript : MonoBehaviour
             remainingTime -= Time.deltaTime;
             UpdateTimerUI();
         }
-        else if (remainingTime <= 0)
+        else if (remainingTime <= 2)
         {
             remainingTime = 0;
-            // GameOver();
+            blackImage.SetActive(true);
+            StartCoroutine(DelaySceneChange());
             timerText.color = Color.red;
             UpdateTimerUI();
         }
@@ -73,5 +84,11 @@ public class TimerCountdownScript : MonoBehaviour
         int minutes = Mathf.FloorToInt(remainingTime / 60);
         int seconds = Mathf.FloorToInt(remainingTime % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    private IEnumerator DelaySceneChange()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("EndScene", LoadSceneMode.Single);
     }
 }
