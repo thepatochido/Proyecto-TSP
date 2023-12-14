@@ -9,6 +9,8 @@ TagManager:
   - Doggy
   - Collectible
   - AlarmaObjeto
+  - HUD
+  - StolenItemCounter
   layers:
   - Default
   - TransparentFX

@@ -1,14 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 
 public class ControladorColeccionablesScript : MonoBehaviour
 {
     public int totalCollectibles = 14;
-    private int collectedCount = 0;
-    private List<ColeccionablesScript> coleccionablesRecogidos = new List<ColeccionablesScript>();
+    public int collectedCount = 0;
 
+    public TextMeshProUGUI itemText;
+
+    private List<ColeccionablesScript> coleccionablesRecogidos = new List<ColeccionablesScript>();
     public ControladorAudioScript audioManager;
     public ColeccionablesScript[] coleccionables;
+
+    private void Start()
+    {
+        itemText.text = "00";
+    }
 
     void Update()
     {
@@ -26,12 +35,25 @@ public class ControladorColeccionablesScript : MonoBehaviour
     void IncrementarContador()
     {
         collectedCount++;
+        UpdateItemText();
         Debug.Log("Contador incrementado. Nuevo valor: " + collectedCount);
 
         if (collectedCount == totalCollectibles)
         {
             audioManager.ChangeMusic();
             Debug.Log("Todos los coleccionables recogidos.");
+        }
+    }
+
+    void UpdateItemText()
+    {
+        if (collectedCount < 10)
+        {
+            itemText.text = "0" + collectedCount.ToString();
+        }else if(collectedCount >= 10)
+        {
+            itemText.text = collectedCount.ToString();
+
         }
     }
 }
