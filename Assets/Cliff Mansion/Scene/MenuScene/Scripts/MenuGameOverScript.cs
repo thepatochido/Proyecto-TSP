@@ -4,6 +4,12 @@ using System;
 
 public class MenuGameOverScript : MonoBehaviour
 {
+    void Start()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+    }
 
     public void Reiniciar(string NombreEscena)
     {
